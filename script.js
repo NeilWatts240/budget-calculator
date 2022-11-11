@@ -24,7 +24,8 @@ let start = document.getElementById('start'),
     additionalExpensesValue = document.querySelector('.additional_expenses-value'),
     incomePeriodValue = document.querySelector('.income_period-value'),
     targetMonthValue = document.querySelector('.target_month-value'),
-    incomeItems = document.querySelectorAll('.income-items');
+    incomeItems = document.querySelectorAll('.income-items'),
+    cancelBtn = document.querySelector('#cancel');
 
 let appData = {
     budget: 0,
@@ -49,6 +50,9 @@ let appData = {
         appData.getAddIncome();
         appData.getBudget();
         appData.showResult();
+        if (start.disabled == false) {
+            appData.changeButton();
+        }
     },
     showResult: function () {
         budgetMonthValue.value = appData.budgetMonth;
@@ -137,9 +141,18 @@ let appData = {
             start.disabled = false;
         }
     },
+    changeButton: function () {
+        start.style.display = 'none';
+        cancelBtn.style.display = 'block';
+    },
+    cancel: function () {
+        location.reload();
+    }
 };
 
 salaryAmount.addEventListener('input', appData.stateHandle);
 start.addEventListener('click', appData.start);
 expensesPlus.addEventListener('click', appData.addExpensesBlock);
 incomePlus.addEventListener('click', appData.addIncomeBlock);
+cancelBtn.addEventListener('click', appData.cancel);
+
