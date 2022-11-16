@@ -34,16 +34,15 @@ document.addEventListener('DOMContentLoaded', () => {
             this.budget = 0;
             this.budgetDay = 0;
             this.budgetMonth = 0;
-            this.expenses = {};
-            this.expensesMonth = 0;
-            this.addExpenses = [];
             this.income = {};
             this.incomeMonth = 0;
             this.addIncome = [];
+            this.expenses = {};
+            this.expensesMonth = 0;
+            this.addExpenses = [];
             this.deposit = false;
             this.percentDeposit = 0;
             this.moneyDeposit = 0;
-            this.mission = 1000000;
         }
         start() {
             this.budget = +salaryAmount.value;
@@ -51,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
             this.getExpensesMonth();
             this.getAddExpenses();
             this.getAddIncome();
+            this.getInfoDeposit();
             this.getBudget();
             this.showResult();
             if (start.disabled == false) {
@@ -126,7 +126,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         getBudget() {
-            this.budgetMonth = this.budget + this.incomeMonth - this.expensesMonth;
+            const monthDeposit = this.moneyDeposit * (this.percentDeposit / 100);
+            this.budgetMonth = this.budget + this.incomeMonth - this.expensesMonth + monthDeposit;
             this.budgetDay = this.budgetMonth / 30;
         }
         getTargetMonth() {
@@ -147,33 +148,90 @@ document.addEventListener('DOMContentLoaded', () => {
         cancel() {
             location.reload();
         }
+        getInfoDeposit() {
+            if (this.deposit) {
+                this.percentDeposit = depositPercent.value;
+                this.moneyDeposit = depositAmount.value;
+            }
+        }
+        changePercent() { //дз
+            const valueSelect = this.value;
+            if (valueSelect === 'other') {
+                //дз
+            } else {
+                depositPercent.value = valueSelect;
+            }
+        }
+        depositHandler() {
+            if (depositCheck.checked) {
+                depositBank.style.display = 'inline-block';
+                depositAmount.style.display = 'inline-block';
+                this.deposit = true;
+                depositBank.addEventListener('change', this.changePercent);
+            } else {
+                depositBank.style.display = 'none';
+                depositAmount.style.display = 'none';
+                depositBank.value = '';
+                depositAmount.value = '';
+                this.deposit = false;
+                depositBank.removeEventListener('change', this.changePercent);
+            }
+        }
         eventListeners() {
             start.addEventListener('click', this.start.bind(this));
             salaryAmount.addEventListener('input', this.stateHandle);
             expensesPlus.addEventListener('click', this.addExpensesBlock);
             incomePlus.addEventListener('click', this.addIncomeBlock);
             cancelBtn.addEventListener('click', this.cancel);
+            depositCheck.addEventListener('change', this.depositHandler.bind(this));
         }
     }
     const newData = new AppData();
     newData.eventListeners();
 });
 
-// class First {
-//     constructor() {
-//     }
-//     hello() {
-//         console.log('Привет я метод родителя!')
-//     }
+/* Напишите функцию на JS. Цель: Убрать все объекты с типом additional, а для basic очки уменьшить в двое.
+
+Изменить необходимо исходный массив*/
+
+// const myLesson = [
+//     { lesson: 1, type: "basic", points: 2 },
+//     { lesson: 2, type: "additional", points: 4 },
+//     { lesson: 3, type: "basic", points: 6 },
+//     { lesson: 4, type: "additional", points: 3 },
+//     { lesson: 5, type: "basic", points: 4 },
+//     { lesson: 6, type: "basic", points: 2 },
+//     { lesson: 7, type: "additional", points: 2 },
+//     { lesson: 8, type: "basic", points: 6 },
+//     { lesson: 9, type: "basic", points: 4 },
+//     { lesson: 10, type: "basic", points: 6 },
+//     { lesson: 11, type: "additional", points: 5 },
+//     { lesson: 12, type: "basic", points: 2 },
+//     { lesson: 13, type: "additional", points: 2 },
+//     { lesson: 14, type: "basic", points: 4 },
+//     { lesson: 15, type: "additional", points: 1 },
+//     { lesson: 16, type: "additional", points: 7 }
+// ];
+
+// function calc() {
+//     myLesson.forEach(function (item, index) {
+//         if (item.type === 'additional') {
+//             delete myLesson[index];
+//         }
+//         if (item.type === 'basic') {
+//             item.points = item.points / 2;
+//         }
+//     });
 // }
-// class Second extends First {
-//     constructor() {
-//         super()
+// calc();
+
+/* Напишите функцию на JS. Цель: Убрать все объекты с типом additional, а для basic очки уменьшить в двое.
+
+Cоздать новый массив, оставляя исходные данные неизменными */
+
+// let result = myLesson.filter(function (item) {
+//     if (item.type !== 'additional') {
+//         item.points = item.points / 2;
+//         return item
 //     }
-//     hello() {
-//         super.hello()
-//         console.log('А я наследуемый метод!')
-//     }
-// }
-// const second = new Second();
-// second.hello();
+// })
