@@ -10,8 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
         depositBank = document.querySelector('.deposit-bank'),
         additionalIncomeItem = document.querySelectorAll('.additional_income-item'),
         salaryAmount = document.querySelector('.salary-amount'),
-        incomeTitle = document.querySelector('.income-title'),
-        expensesTitle = document.querySelector('.expenses-title'),
         expensesItems = document.querySelectorAll('.expenses-items'),
         additionalExpensesItem = document.querySelector('.additional_expenses-item'),
         depositAmount = document.querySelector('.deposit-amount'),
@@ -136,8 +134,8 @@ document.addEventListener('DOMContentLoaded', () => {
         calcPeriod() {
             return this.budgetMonth * periodSelect.value;
         }
-        stateHandle() {
-            if (salaryAmount.value !== '') {
+        salaryAmountHandler() {
+            if (salaryAmount.value !== '' && !isNaN(salaryAmount.value)) {
                 start.disabled = false;
             }
         }
@@ -154,11 +152,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.moneyDeposit = depositAmount.value;
             }
         }
-        changePercent() { //дз
+        changePercent() {
             const valueSelect = this.value;
             if (valueSelect === 'other') {
-                //дз
+                depositPercent.style.display = 'inline-block';
+                depositPercent.disabled = false;
+                depositPercent.addEventListener('input', function () {
+                    if (depositPercent.value > 100 || isNaN(depositPercent.value)) {
+                        alert('Введите корректное значение в поле проценты');
+                        depositPercent.value = 0;
+                    }
+                });
             } else {
+                depositPercent.style.display = 'none';
                 depositPercent.value = valueSelect;
             }
         }
@@ -169,6 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.deposit = true;
                 depositBank.addEventListener('change', this.changePercent);
             } else {
+                depositPercent.style.display = 'none';
                 depositBank.style.display = 'none';
                 depositAmount.style.display = 'none';
                 depositBank.value = '';
@@ -179,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         eventListeners() {
             start.addEventListener('click', this.start.bind(this));
-            salaryAmount.addEventListener('input', this.stateHandle);
+            salaryAmount.addEventListener('input', this.salaryAmountHandler);
             expensesPlus.addEventListener('click', this.addExpensesBlock);
             incomePlus.addEventListener('click', this.addIncomeBlock);
             cancelBtn.addEventListener('click', this.cancel);
@@ -189,49 +196,3 @@ document.addEventListener('DOMContentLoaded', () => {
     const newData = new AppData();
     newData.eventListeners();
 });
-
-/* Напишите функцию на JS. Цель: Убрать все объекты с типом additional, а для basic очки уменьшить в двое.
-
-Изменить необходимо исходный массив*/
-
-// const myLesson = [
-//     { lesson: 1, type: "basic", points: 2 },
-//     { lesson: 2, type: "additional", points: 4 },
-//     { lesson: 3, type: "basic", points: 6 },
-//     { lesson: 4, type: "additional", points: 3 },
-//     { lesson: 5, type: "basic", points: 4 },
-//     { lesson: 6, type: "basic", points: 2 },
-//     { lesson: 7, type: "additional", points: 2 },
-//     { lesson: 8, type: "basic", points: 6 },
-//     { lesson: 9, type: "basic", points: 4 },
-//     { lesson: 10, type: "basic", points: 6 },
-//     { lesson: 11, type: "additional", points: 5 },
-//     { lesson: 12, type: "basic", points: 2 },
-//     { lesson: 13, type: "additional", points: 2 },
-//     { lesson: 14, type: "basic", points: 4 },
-//     { lesson: 15, type: "additional", points: 1 },
-//     { lesson: 16, type: "additional", points: 7 }
-// ];
-
-// function calc() {
-//     myLesson.forEach(function (item, index) {
-//         if (item.type === 'additional') {
-//             delete myLesson[index];
-//         }
-//         if (item.type === 'basic') {
-//             item.points = item.points / 2;
-//         }
-//     });
-// }
-// calc();
-
-/* Напишите функцию на JS. Цель: Убрать все объекты с типом additional, а для basic очки уменьшить в двое.
-
-Cоздать новый массив, оставляя исходные данные неизменными */
-
-// let result = myLesson.filter(function (item) {
-//     if (item.type !== 'additional') {
-//         item.points = item.points / 2;
-//         return item
-//     }
-// })
